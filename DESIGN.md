@@ -48,6 +48,8 @@ Condensed, bold Roboto Condensed for Cyrillic headings and oversized BLACK HOUSE
 ## Layout
 Graphite header/hero with a real metallic 3D wheel crossing a giant brand wordmark. A thin mechanical rule and rounded panel edge lead into a pale service area. Alternate white information panels, a dark photographic gallery, and a clear contact section with a local map. Responsive desktop gutters and 20px mobile gutters; native page scrolling, readable content at 360px.
 
+The revised composition follows an automotive magazine and workshop service sheet: an instrument-like circular stage behind the wheel, a narrow real-photo strip in the hero, oversized section indices, asymmetric photographic service panels, a visible six-row price sheet and an expansive mosaic of real work. Avoid repeated equal icon cards and empty graphic substitutes for photographs. Motion belongs to the wheel, a slow decorative orbit, image hover and restrained section entrances. Keep all decorative movement off for reduced motion.
+
 ## Elevation & Depth
 Three.js tyre, rim, hub and brake disc: realistic rubber tread, reflective spokes, a slow axle rotation and pointer response. A labelled exploded-view toggle separates the parts. A visible pause button, keyboard rotation controls, reduced motion, offscreen and hidden-tab pauses, GPU cleanup and a static fallback are required. Avoid expensive scrolling effects and layout animation.
 

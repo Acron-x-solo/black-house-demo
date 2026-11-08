@@ -552,7 +552,7 @@ export default function WheelScene() {
   return (
     <div
       ref={container}
-      className={`wheel-scene ${ready && !failed ? "scene-ready" : ""} ${exploded ? "is-exploded" : ""}`}
+      className={`wheel-scene ${ready && !failed ? "scene-ready" : ""} ${exploded ? "is-exploded" : ""} ${paused ? "is-paused" : ""}`}
     >
       <div className="wheel-aura" aria-hidden="true" />
       {(!ready || failed) && <WheelFallback />}

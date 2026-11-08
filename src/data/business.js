@@ -15,12 +15,12 @@ export const workshop = {
   ratingCount: 176,
 };
 export const historicalPrices = [
-  { title: "Покраска", price: 1500 },
+  { title: "Покраска одного элемента", price: 1500 },
   { title: "Полировка фар", price: 500 },
-  { title: "Предпродажная подготовка", price: 10000 },
+  { title: "Предпродажная подготовка автомобиля", price: 10000 },
   { title: "Полировка автомобиля", price: 5000 },
-  { title: "Удаление битума и насекомых", price: 500 },
-  { title: "Антихром", price: 3000 },
+  { title: "Удаление битума и насекомых с кузова", price: 500 },
+  { title: "Антихром", price: 3000, description: "Снятие хрома и покраска" },
 ];
 export const faqs = [
   {

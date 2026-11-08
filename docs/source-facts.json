@@ -21,24 +21,62 @@
   "reviewCount": 127,
   "galleryCount": 56,
   "ratingFreshness": "2GIS current extracted page marked Crawled: today; older search index has conflicting counts",
-  "features": ["Возможна запись", "Выездной шиномонтаж", "Ремонт порезов", "Ошиповка шин"],
-  "paymentMethods": ["Наличный расчёт", "Перевод с карты"],
+  "features": [
+    "Возможна запись",
+    "Выездной шиномонтаж",
+    "Ремонт порезов",
+    "Ошиповка шин"
+  ],
+  "paymentMethods": [
+    "Наличный расчёт",
+    "Перевод с карты"
+  ],
   "pricesSource": "https://2gis.ru/novosibirsk/firm/70000001056218369/tab/prices",
   "pricesUpdatedOn": "2022-06-04",
   "pricesNote": "Published catalog contains old detailing prices, not tire-service prices. Current tire prices and service availability must be confirmed with the workshop.",
   "publishedPrices": [
-    {"name": "Покраска", "fromRubles": 1500},
-    {"name": "Полировка фар", "fromRubles": 500},
-    {"name": "Предпродажная подготовка автомобиля", "fromRubles": 10000},
-    {"name": "Полировка автомобиля", "fromRubles": 5000},
-    {"name": "Удаление битума и насекомых с кузова", "fromRubles": 500},
-    {"name": "Антихром", "fromRubles": 3000}
+    {
+      "name": "Покраска",
+      "fromRubles": 1500
+    },
+    {
+      "name": "Полировка фар",
+      "fromRubles": 500
+    },
+    {
+      "name": "Предпродажная подготовка автомобиля",
+      "fromRubles": 10000
+    },
+    {
+      "name": "Полировка автомобиля",
+      "fromRubles": 5000
+    },
+    {
+      "name": "Удаление битума и насекомых с кузова",
+      "fromRubles": 500
+    },
+    {
+      "name": "Антихром",
+      "fromRubles": 3000
+    }
   ],
-  "photoStatus": "The primary gallery reports 56 photos but the accessible web extraction exposes no image URLs. No unrelated stock images have been substituted.",
+  "photoStatus": "All 56 exact-firm photo records retrieved from the public 2GIS frontend photo endpoint. 12 downloaded and embedded; 52 user photos and 4 social-media imports. No owner-upload flags. Full attribution is in docs/photo-sources.json.",
   "sources": {
     "contacts": "https://2gis.ru/novosibirsk/firm/70000001056218369",
     "info": "https://2gis.ru/novosibirsk/firm/70000001056218369/tab/info",
     "reviews": "https://2gis.ru/novosibirsk/firm/70000001056218369/tab/reviews",
     "gallery": "https://2gis.ru/novosibirsk/gallery/firm/70000001056218369"
+  },
+  "pricesCompleteness": {
+    "total": 6,
+    "retrieved": 6,
+    "categoryCount": 6,
+    "secondPageItems": 0,
+    "priceListImages": 0,
+    "evidence": [
+      "prices-page1.json",
+      "prices-page2.json",
+      "prices-images.json"
+    ]
   }
 }

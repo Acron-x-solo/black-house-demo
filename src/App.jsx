@@ -11,55 +11,23 @@ import {
   MessageCircle,
   Menu,
   X,
-  Wrench,
-  Truck,
-  CircleDashed,
   Plus,
   Star,
   Navigation,
   CreditCard,
-  ShieldCheck,
 } from "lucide-react";
 import { workshop, faqs } from "./data/business.js";
 import Reveal from "./components/Reveal.jsx";
 import Quote from "./components/Quote.jsx";
 import Photo from "./components/Photo.jsx";
+import Services from "./components/Services.jsx";
+import Gallery from "./components/Gallery.jsx";
 const WheelScene = lazy(() => import("./components/WheelScene.jsx"));
 const nav = [
   { id: "services", name: "Услуги" },
   { id: "prices", name: "Стоимость" },
   { id: "gallery", name: "Мастерская" },
   { id: "contacts", name: "Контакты" },
-];
-const services = [
-  {
-    title: "Шиномонтаж",
-    tag: "К следующему сезону",
-    text: "Меняешь сезон — меняй шины. Согласуй удобное время и приезжай со своим комплектом.",
-    Icon: CircleDot,
-    id: "tyre",
-  },
-  {
-    title: "Ремонт порезов",
-    tag: "Снова в движении",
-    text: "Повреждение шины требует внимания. Мастер оценит состояние и возможность ремонта.",
-    Icon: Wrench,
-    id: "repair",
-  },
-  {
-    title: "Ошиповка шин",
-    tag: "Когда зима рядом",
-    text: "Подготовка зимних шин к холодному сезону. Обсуди состояние своего комплекта с мастерской.",
-    Icon: CircleDashed,
-    id: "studs",
-  },
-  {
-    title: "Выездной шиномонтаж",
-    tag: "Помощь на твоём маршруте",
-    text: "Не получается доехать? Позвони, чтобы уточнить возможность выезда и условия помощи.",
-    Icon: Truck,
-    id: "mobile",
-  },
 ];
 function Brand() {
   return (
@@ -147,6 +115,7 @@ function Header() {
 function Hero() {
   return (
     <section className="hero">
+      <div className="hero-gridlines" aria-hidden="true" />
       <div className="hero-inner container">
         <div className="hero-copy">
           <motion.span
@@ -205,6 +174,19 @@ function Hero() {
           </a>
         </div>
         <div className="hero-visual">
+          <div className="wheel-stage" aria-hidden="true">
+            <div className="stage-orbit">
+              <span />
+            </div>
+            <span className="stage-measure measure-top">
+              360° / КАЖДАЯ ДЕТАЛЬ
+            </span>
+            <span className="stage-measure measure-left">
+              BLACK HOUSE / AUTO SERVICE
+            </span>
+            <span className="stage-cross cross-top">+</span>
+            <span className="stage-cross cross-bottom">+</span>
+          </div>
           <Suspense
             fallback={
               <div className="scene-loading">
@@ -233,60 +215,40 @@ function Hero() {
       <div className="hero-wordmark" aria-hidden="true">
         BLACK HOUSE
       </div>
-    </section>
-  );
-}
-function Services() {
-  return (
-    <section id="services" className="services-section section-pad container">
-      <Reveal className="section-heading">
-        <div>
-          <span className="eyebrow">ДЛЯ ТВОЕЙ МАШИНЫ И ТВОИХ ПЛАНОВ</span>
-          <h2>
-            Колёса — наша забота.
-            <br />
-            <span>Дорога — твоя.</span>
-          </h2>
+      <div className="hero-photo-strip container">
+        <a href="#gallery" className="hero-photo-link">
+          <Photo
+            src="/images/black-house-cars.webp"
+            alt="Автомобили клиентов Black House"
+            loading="eager"
+          />
+          <span>
+            РЕАЛЬНЫЕ РАБОТЫ
+            <ArrowUpRight size={20} />
+          </span>
+        </a>
+        <a href="#gallery" className="hero-photo-link">
+          <Photo
+            src="/images/black-house-honda.webp"
+            alt="Honda в мастерской Black House"
+            loading="eager"
+          />
+          <span>
+            ВНИМАНИЕ К ДЕТАЛЯМ
+            <ArrowUpRight size={20} />
+          </span>
+        </a>
+        <div className="hero-photo-note">
+          <span>НЕ ПРОСТО КОЛЁСА.</span>
+          <strong>
+            Твой контакт
+            <br />с дорогой.
+          </strong>
+          <a href="#gallery">
+            Мастерская в кадре <ArrowRight size={18} />
+          </a>
         </div>
-        <p>
-          От смены сезона до неожиданного прокола.
-          <br />
-          Выбери задачу — мы на связи.
-        </p>
-      </Reveal>
-      <div className="services-grid">
-        {services.map(({ title, tag, text, Icon, id }, index) => (
-          <Reveal
-            className={`service-card service-${id}`}
-            key={id}
-            delay={index * 0.05}
-          >
-            <div className="service-top">
-              <span className="service-icon">
-                <Icon size={34} strokeWidth={1.4} />
-              </span>
-              <span className="service-tag">{tag}</span>
-            </div>
-            <h3>{title}</h3>
-            <p>{text}</p>
-            <a href="#prices">
-              Уточнить стоимость <ArrowUpRight size={19} />
-            </a>
-            <div className="service-decoration" aria-hidden="true">
-              <Icon size={160} strokeWidth={0.45} />
-            </div>
-          </Reveal>
-        ))}
       </div>
-      <Reveal className="service-note">
-        <ShieldCheck size={22} />
-        <p>
-          Каждое колесо — своя история.
-          <br />
-          <span>Состояние шин и объём работ обсудим перед записью.</span>
-        </p>
-        <BookLink className="button button-dark">Обсудить задачу</BookLink>
-      </Reveal>
     </section>
   );
 }
@@ -324,87 +286,6 @@ function Process() {
               {i < 2 && <ArrowRight size={20} className="step-arrow" />}
             </Reveal>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-function Workshop() {
-  return (
-    <section id="gallery" className="workshop-section">
-      <div className="container">
-        <Reveal className="section-heading">
-          <div>
-            <span className="eyebrow">BLACK HOUSE · 1-Я ЧУЛЫМСКАЯ</span>
-            <h2>
-              Место, где
-              <br />
-              <span>знают твои колёса.</span>
-            </h2>
-          </div>
-          <p>
-            Мастерская на Лесоперевалке.
-            <br />
-            Посмотри карточку перед первым визитом.
-          </p>
-        </Reveal>
-        <Reveal className="gallery-source">
-          <div className="gallery-graphic" aria-hidden="true">
-            <div className="technical-ring ring-one" />
-            <div className="technical-ring ring-two" />
-            <div className="technical-ring ring-three" />
-            <div className="technical-hub">
-              <CircleDot size={150} strokeWidth={0.7} />
-            </div>
-            <span className="graphic-wordmark">
-              BLACK
-              <br />
-              HOUSE
-            </span>
-            <span className="graphic-caption">ВНИМАНИЕ К КАЖДОЙ ДЕТАЛИ</span>
-            <span className="graphic-cross cross-one">+</span>
-            <span className="graphic-cross cross-two">+</span>
-          </div>
-          <div className="gallery-source-copy">
-            <span className="eyebrow">ЗАГЛЯНИ ПЕРЕД ВИЗИТОМ</span>
-            <h3>
-              Мастерская
-              <br />в кадре.
-            </h3>
-            <p>
-              Фотографии, отзывы и информация о Black House — в нашей карточке
-              2ГИС.
-            </p>
-            <a
-              className="button button-light"
-              href={workshop.photoPage}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Посмотреть фотографии <ArrowUpRight size={18} />
-            </a>
-            <span className="gallery-source-count">
-              56 фотографий в карточке мастерской
-            </span>
-          </div>
-        </Reveal>
-        <div className="workshop-rating">
-          <a href={workshop.reviews} target="_blank" rel="noreferrer">
-            <span>
-              {workshop.rating}
-              <Star size={20} fill="currentColor" />
-            </span>
-            <strong>
-              О нас говорят водители
-              <small>{workshop.ratingCount} оценок в 2ГИС</small>
-            </strong>
-            <ArrowUpRight size={22} />
-          </a>
-          <p>
-            Личные впечатления — лучший ориентир.
-            <br />
-            Почитай отзывы перед поездкой.
-          </p>
         </div>
       </div>
     </section>
@@ -582,7 +463,7 @@ export default function App() {
         <Services />
         <Process />
         <Quote />
-        <Workshop />
+        <Gallery />
         <Faq />
         <Contacts />
       </main>

@@ -4,7 +4,6 @@ import {
   Check,
   CircleDot,
   MessageCircle,
-  Minus,
   Plus,
 } from "lucide-react";
 import { quoteServices, diameters, buildQuote } from "../data/quote.js";
@@ -19,18 +18,79 @@ export default function Quote() {
     <section id="prices" className="quote-section section-pad container">
       <Reveal className="section-heading">
         <div>
-          <span className="eyebrow">ТОЧНО ПОД ТВОИ КОЛЁСА</span>
+          <span className="eyebrow">
+            <span className="section-index">02 /</span> УСЛУГИ И СТОИМОСТЬ
+          </span>
           <h2>
-            Твоя задача.
+            Всё по делу.
             <br />
-            <span>Понятный запрос.</span>
+            <span>Каждая цена на виду.</span>
           </h2>
         </div>
         <p>
-          Выбери, что нужно сделать.
+          Все цены, опубликованные мастерской в 2ГИС.
           <br />
-          Стоимость и время подскажет мастерская.
+          Шиномонтаж — по твоему запросу.
         </p>
+      </Reveal>
+      <Reveal className="price-catalog">
+        <div className="price-catalog-intro">
+          <span className="eyebrow">ПРАЙС BLACK HOUSE / 2ГИС</span>
+          <h3>
+            Кузов. <br />
+            Свет. <br />
+            <span>Детали.</span>
+          </h3>
+          <p>
+            Покраска и уход
+            <br />
+            за автомобилем.
+          </p>
+          <span className="price-source-date">
+            Обновлён в 2ГИС: <strong>04.06.2022</strong>
+          </span>
+        </div>
+        <div className="price-sheet">
+          <div className="price-sheet-label">
+            <span>УСЛУГА</span>
+            <span>СТОИМОСТЬ, ₽</span>
+          </div>
+          <ul>
+            {historicalPrices.map((item, index) => (
+              <li className="price-row" key={item.title}>
+                <span className="price-row-index">0{index + 1}</span>
+                <span className="price-row-name">
+                  {item.title}
+                  {item.description && <small>{item.description}</small>}
+                </span>
+                <strong>
+                  <small>от</small>{" "}
+                  {new Intl.NumberFormat("ru-RU").format(item.price)}{" "}
+                  <small>₽</small>
+                </strong>
+              </li>
+            ))}
+          </ul>
+          <div className="price-catalog-note">
+            <p>
+              В источнике указан прайс 2022 года. Актуальную стоимость и
+              возможность выполнения работ уточни перед визитом.
+            </p>
+            <a
+              href={workshop.pricesPage}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Открыть полный прайс в 2ГИС"
+            >
+              <ArrowUpRight size={23} />
+            </a>
+          </div>
+        </div>
+      </Reveal>
+      <Reveal className="quote-builder-heading">
+        <span className="eyebrow">ШИНОМОНТАЖ / ЛИЧНЫЙ ЗАПРОС</span>
+        <h3>Под твои колёса.</h3>
+        <p>Выбери работу и размер. Мастерская подскажет стоимость.</p>
       </Reveal>
       <Reveal className="quote-layout">
         <div className="quote-options">
@@ -128,40 +188,6 @@ export default function Quote() {
           </p>
         </aside>
       </Reveal>
-      <details className="other-prices">
-        <summary>
-          <span>
-            Другие услуги мастерской<small>Прайс в 2ГИС от 04.06.2022</small>
-          </span>
-          <Plus className="details-plus" size={21} />
-          <Minus className="details-minus" size={21} />
-        </summary>
-        <div className="other-prices-content">
-          <p>
-            В опубликованном прайсе также есть работы по уходу за автомобилем.
-            Эти цены датированы 2022 годом — актуальную стоимость и доступность
-            услуг уточни перед визитом.
-          </p>
-          <ul>
-            {historicalPrices.map((item) => (
-              <li key={item.title}>
-                <span>{item.title}</span>
-                <strong>
-                  от {new Intl.NumberFormat("ru-RU").format(item.price)} ₽
-                </strong>
-              </li>
-            ))}
-          </ul>
-          <a
-            className="text-link"
-            href={workshop.pricesPage}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Прайс мастерской в 2ГИС <ArrowUpRight size={17} />
-          </a>
-        </div>
-      </details>
     </section>
   );
 }

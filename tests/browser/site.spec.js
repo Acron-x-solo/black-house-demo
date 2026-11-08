@@ -25,9 +25,39 @@ test('quote selects work and wheels and prepares a truthful WhatsApp request',as
   await expect(prices.locator('.quote-cost')).toContainText('Уточним стоимость');
   await prices.getByRole('button',{name:'Не знаю размер'}).click();
   await expect(prices.locator('.quote-selection')).toContainText('Размер уточним');
-  await prices.locator('.other-prices summary').click();
-  await expect(prices.locator('.other-prices-content')).toContainText('2022');
-  await expect(prices.locator('.other-prices li')).toHaveCount(6);
+  await expect(prices.locator('.price-catalog')).toContainText('04.06.2022');
+  await expect(prices.locator('.price-row')).toHaveCount(6);
+  for (const row of await prices.locator('.price-row').all()) {
+    await expect(row).toBeVisible();
+    await expect(row).toContainText('от');
+  }
+});
+
+test('real photos open a keyboard-accessible gallery and restore focus', async ({page}) => {
+  await page.goto('/');
+  const photos = page.locator('#gallery .gallery-photo-button');
+  await expect(photos).toHaveCount(12);
+  const first = photos.first();
+  await first.scrollIntoViewIfNeeded();
+  await first.click();
+  const dialog = page.getByRole('dialog', {name:'Фотографии Black House'});
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('.lightbox-counter')).toHaveText('01 / 12');
+  await page.keyboard.press('ArrowRight');
+  await expect(dialog.locator('.lightbox-counter')).toHaveText('02 / 12');
+  await page.keyboard.press('ArrowLeft');
+  await expect(dialog.locator('.lightbox-counter')).toHaveText('01 / 12');
+  await expect(dialog.locator('img')).toBeVisible();
+  expect(await dialog.locator('img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(first).toBeFocused();
+  const photoErrors = [];
+  for (const src of await page.locator('img').evaluateAll(images => [...new Set(images.map(image => image.src))])) {
+    const response = await page.request.get(src);
+    if (!response.ok()) photoErrors.push(`${response.status()} ${src}`);
+  }
+  expect(photoErrors).toEqual([]);
 });
 test('real wheel can explode, rotate and pause',async({page})=>{
   await page.goto('/');
@@ -50,6 +80,8 @@ test('mobile navigation, reduced motion and WebGL fallback retain useful content
     await page.setViewportSize({width,height:844});
     await page.goto('/');
     await expect(page.locator('.wheel-fallback')).toBeVisible();
+    const orbit = await page.locator('.stage-orbit').evaluate(element => ({name:getComputedStyle(element).animationName,playState:getComputedStyle(element).animationPlayState}));
+    expect(orbit.name === 'none' || orbit.playState === 'paused').toBe(true);
     await page.getByRole('button',{name:'Открыть меню'}).click();
     await page.locator('#mobile-menu').getByRole('link',{name:'Услуги'}).click();
     await expect(page.locator('#mobile-menu')).toHaveCount(0);
@@ -58,6 +90,10 @@ test('mobile navigation, reduced motion and WebGL fallback retain useful content
       expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
     }
   }
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.goto('/');
+  await expect(page.locator('.wheel-hint')).toHaveText('Каждая деталь имеет значение');
+  expect(await page.locator('.stage-orbit').evaluate(orbit => getComputedStyle(orbit).animationPlayState)).toBe('paused');
 });
 test('losing and restoring WebGL keeps a paused wheel usable',async({page})=>{
   await page.goto('/');

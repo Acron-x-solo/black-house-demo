@@ -11,7 +11,9 @@ try{
   await page.getByRole('button',{name:'Разобрать колесо'}).click();await page.waitForTimeout(1000);
   await page.screenshot({path:'docs/screenshots/desktop-exploded.png'});
   await page.getByRole('button',{name:'Собрать колесо'}).click();
-  for(const selector of ['#services','.process-section','#prices','#gallery','#faq','#contacts']){await page.locator(selector).scrollIntoViewIfNeeded();await page.waitForTimeout(700)}
+  for(let top=0;top<await page.evaluate(()=>document.documentElement.scrollHeight);top+=650){await page.evaluate(y=>window.scrollTo({top:y,behavior:'instant'}),top);await page.waitForTimeout(350)}
+  await page.waitForTimeout(700);
+  for(const [name,selector] of [['services','#services'],['prices','.price-catalog'],['gallery','#gallery']]){await page.locator(selector).screenshot({path:`docs/screenshots/revised-${name}.png`})}
   await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(700);
   await page.screenshot({path:'docs/screenshots/desktop-full.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});
@@ -21,4 +23,5 @@ try{
   const targets=await page.locator('.wheel-controls button').evaluateAll(buttons=>buttons.map(button=>({name:button.getAttribute('aria-label')||button.textContent,width:button.getBoundingClientRect().width,height:button.getBoundingClientRect().height})));
   console.log(JSON.stringify({targets,overflow:await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)}));
   await page.screenshot({path:'docs/screenshots/mobile-wheel.png'});
+  for(const [name,selector] of [['services','.service-showcase'],['prices','.price-catalog'],['gallery','#gallery .section-heading']]){await page.locator(selector).scrollIntoViewIfNeeded();await page.waitForTimeout(700);await page.screenshot({path:`docs/screenshots/mobile-${name}.png`})}
 }finally{await browser.close()}

@@ -15,8 +15,16 @@ try{
   await page.getByRole('link',{name:'Записаться в мастерскую',exact:true}).click();
   await expect(page.locator('#contacts h2')).toBeInViewport();
   assert.equal(page.url(),origin+prefix+'#contacts');
-  const images=await page.locator('img').evaluateAll(nodes=>nodes.map(image=>({path:new URL(image.src).pathname,width:image.naturalWidth})));
-  assert.ok(images.length>=1&&images.every(image=>image.path.startsWith(prefix)&&image.width>0));
+  for (const img of await page.locator('img:visible').all()) { await img.scrollIntoViewIfNeeded(); await expect(img).toHaveJSProperty('complete',true); }
+  const images=await page.locator('img:visible').evaluateAll(nodes=>nodes.map(image=>({path:new URL(image.src).pathname,width:image.naturalWidth})));
+  assert.ok(images.length>=18&&images.every(image=>image.path.startsWith(prefix)&&image.width>0));
+  await expect(page.locator('.price-row')).toHaveCount(6);
+  await expect(page.locator('.price-catalog')).toContainText('04.06.2022');
+  await page.locator('.gallery-photo-button').first().click();
+  const dialog=page.getByRole('dialog',{name:'Фотографии Black House'});
+  await expect(dialog).toBeVisible();await page.keyboard.press('ArrowRight');
+  await expect(dialog.locator('.lightbox-counter')).toHaveText('02 / 12');
+  await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
   await page.evaluate(()=>document.fonts.ready);
   assert.ok(await page.evaluate(()=>[...document.fonts].every(font=>font.status==='loaded')));
   const prices=page.locator('#prices');
@@ -33,5 +41,5 @@ try{
   assert.equal(page.url(),origin+prefix+'#contacts');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   assert.equal(context.pages().length,1);assert.deepEqual(failures,[]);
-  console.log(`Verified ${origin}${prefix}: WebGL/exploded view, quote, contacts, fonts/map prefix, mobile keyboard and reduced motion; no failed requests or runtime errors.`);
+  console.log(`Verified ${origin}${prefix}: WebGL/exploded view, full six-price catalogue, real photos/dialog, quote, contacts, all asset prefixes, mobile keyboard and reduced motion; no failed requests or runtime errors.`);
 }finally{await browser.close()}
