@@ -1,0 +1,37 @@
+import { chromium, expect } from '@playwright/test';
+import assert from 'node:assert/strict';
+const origin=process.argv[2]||'http://localhost:4174';
+const prefix='/black-house-demo/';
+const browser=await chromium.launch({headless:true});
+try{
+  const context=await browser.newContext({viewport:{width:1440,height:1000}});
+  const page=await context.newPage();const failures=[];
+  page.on('pageerror',error=>failures.push(error.message));
+  page.on('response',response=>{if(response.url().startsWith(origin)&&response.status()>=400)failures.push(`${response.status()} ${response.url()}`)});
+  await page.goto(origin+prefix,{waitUntil:'networkidle'});
+  await expect(page.locator('.wheel-scene')).toHaveClass(/scene-ready/);
+  await page.getByRole('button',{name:'Разобрать колесо'}).click();
+  await expect(page.getByRole('button',{name:'Собрать колесо'})).toBeVisible();
+  await page.getByRole('link',{name:'Записаться в мастерскую',exact:true}).click();
+  await expect(page.locator('#contacts h2')).toBeInViewport();
+  assert.equal(page.url(),origin+prefix+'#contacts');
+  const images=await page.locator('img').evaluateAll(nodes=>nodes.map(image=>({path:new URL(image.src).pathname,width:image.naturalWidth})));
+  assert.ok(images.length>=1&&images.every(image=>image.path.startsWith(prefix)&&image.width>0));
+  await page.evaluate(()=>document.fonts.ready);
+  assert.ok(await page.evaluate(()=>[...document.fonts].every(font=>font.status==='loaded')));
+  const prices=page.locator('#prices');
+  await prices.getByRole('button',{name:'R18',exact:true}).click();
+  await prices.getByRole('button',{name:'2 колеса',exact:true}).click();
+  const url=new URL(await prices.getByRole('link',{name:'Отправить запрос'}).getAttribute('href'));
+  assert.match(url.searchParams.get('text'),/R18, 2 колеса/);
+  await page.setViewportSize({width:360,height:844});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto(origin+prefix,{waitUntil:'networkidle'});
+  await expect(page.getByRole('button',{name:'Приостановить 3D-анимацию'})).toHaveCount(0);
+  const book=page.getByRole('link',{name:'Записаться в мастерскую',exact:true});await book.focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#contacts h2')).toBeInViewport();
+  assert.equal(page.url(),origin+prefix+'#contacts');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  assert.equal(context.pages().length,1);assert.deepEqual(failures,[]);
+  console.log(`Verified ${origin}${prefix}: WebGL/exploded view, quote, contacts, fonts/map prefix, mobile keyboard and reduced motion; no failed requests or runtime errors.`);
+}finally{await browser.close()}
